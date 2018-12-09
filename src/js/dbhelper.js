@@ -35,9 +35,7 @@ class DBHelper {
   static createDB(restaurants) {
     var dbPromise = DBHelper.openDB();
 
-     // Open (or create) restaurant database
-     var dbPromise = indexedDB.open("restaurantDB", 1);
-      dbPromise.onupgradeneeded = function() {
+    dbPromise.onupgradeneeded = function() {
        var db = dbPromise.result;
        var store = db.createObjectStore("RestaurantObjectStore", {keyPath: "id"});
        var index = store.createIndex("by-id", "id");
@@ -60,7 +58,6 @@ class DBHelper {
           db.close();
         };
       }
-      console.log(dbPromise);
   }
 
   /**
