@@ -35,6 +35,8 @@
   "email": "brandy@udacity.com",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-responsive": "^2.11.0"
   }
 }

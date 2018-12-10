@@ -164,8 +164,14 @@ createRestaurantHTML = (restaurant) => {
   li.append(article);
 
   const image = document.createElement('img');
-  image.className = 'restaurant-img lazy-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.className = 'restaurant-img lazy';
+  image.src = '/img/placeholder.png';
+  image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant);
+  // image.setAttribute('data-src',DBHelper.imageUrlForRestaurant(restaurant));
+    // Set srcset for responsive
+  const image480 = image.dataset.src.replace(/(\.[\w\d_-]+)$/i, '-480$1')
+  image.dataset.srcset = `${image480} 480w, ${image.dataset.src} 800w`;
+	// image.setAttribute('data-srcset', `${image480} 480w,`+ image.getAttribute('data-src') +` 800w`);
   image.alt = restaurant.name;
   article.append(image);
 
