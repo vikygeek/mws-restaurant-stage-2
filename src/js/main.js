@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added 
   fetchNeighborhoods();
   fetchCuisines();
+  registerServiceWorker();
 });
 
 /**
@@ -163,8 +164,14 @@ createRestaurantHTML = (restaurant) => {
   li.append(article);
 
   const image = document.createElement('img');
-  image.className = 'restaurant-img lazy-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.className = 'restaurant-img lazy';
+  image.src = '/img/placeholder.png';
+  image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant);
+  // image.setAttribute('data-src',DBHelper.imageUrlForRestaurant(restaurant));
+    // Set srcset for responsive
+  const image480 = image.dataset.src.replace(/(\.[\w\d_-]+)$/i, '-480$1')
+  image.dataset.srcset = `${image480} 480w, ${image.dataset.src} 800w`;
+	// image.setAttribute('data-srcset', `${image480} 480w,`+ image.getAttribute('data-src') +` 800w`);
   image.alt = restaurant.name;
   article.append(image);
 
@@ -214,3 +221,31 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 } */
 
+registerServiceWorker = () => {
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('sw.js', {
+			scope: './'
+		}).then((registration) => {
+      var serviceWorker;
+      if (registration.installing) {
+          serviceWorker = registration.installing;
+          console.log('installing');
+      } else if (registration.waiting) {
+          serviceWorker = registration.waiting;
+          console.log('waiting');
+      } else if (registration.active) {
+          serviceWorker = registration.active;
+          console.log('active');
+      }
+      if (serviceWorker) {
+          // logState(serviceWorker.state);
+          serviceWorker.addEventListener('statechange', function (e) {
+              // logState(e.target.state);
+              console.log(e.target.state);
+          });
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+}
